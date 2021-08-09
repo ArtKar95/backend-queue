@@ -5,7 +5,6 @@ import app from './src/bootstrap/app';
 import type { IMongoConfig } from './src/types/model';
 import mongo from './src/bootstrap/mongo';
 import { createServer } from 'http';
-import type { AnyARecord } from 'dns';
 
 /* eslint-disable no-alert, no-console */
 const server = createServer(app);
