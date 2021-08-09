@@ -26,7 +26,7 @@ mongo(mongoConfig as IMongoConfig)
             console.error('No valid port specified');
             process.exit(1);
         }
-        const fullApiHost = `localhost:${port}`;
+        const fullApiHost = `0.0.0.0:${port}`;
         console.log(
             `-------------------- API is running on ${fullApiHost} --------------------`,
         );
