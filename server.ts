@@ -31,7 +31,7 @@ mongo(mongoConfig as IMongoConfig)
             `-------------------- API is running on ${fullApiHost} --------------------`,
         );
         console.log('Database connection has been established successfully.');
-        server.listen(port);
+        server.listen(port, '0.0.0.0');
         if (process.env.NODE_ENV === 'dev') {
             console.log(
                 `API documentation is available in http://${fullApiHost}/api-docs`,
