@@ -9,7 +9,7 @@
             "url": ""
         }
     },
-    "host": "localhost:3007",
+    "host": "queue-api-backend.herokuapp.com",
     "basePath": "/",
     "tags": [
         {
