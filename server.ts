@@ -31,13 +31,12 @@ mongo(mongoConfig as IMongoConfig)
             `-------------------- API is running on ${fullApiHost} --------------------`,
         );
         console.log('Database connection has been established successfully.');
-        server.listen(process.env.PORT, +process.env.HOST);
-        // server.listen(port);
-        // if (process.env.NODE_ENV === 'dev') {
-        //     console.log(
-        //         `API documentation is available in http://${fullApiHost}/api-docs`,
-        //     );
-        // }
+        server.listen(port);
+        if (process.env.NODE_ENV === 'dev') {
+            console.log(
+                `API documentation is available in http://${fullApiHost}/api-docs`,
+            );
+        }
     })
     .catch((err) => {
         console.error('Unable to connect to the database:', err);
