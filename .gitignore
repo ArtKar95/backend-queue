@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+
+# Dependencies
+node_modules/
+
+# Coverage
+coverage
+
+# Transpiled files
+build/
+
+# VS Code
+*.vscode
+
+# JetBrains IDEs
+*.idea
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+*.DS_Store
+
+# Env
+*.env
+
+# Backup files
+*.bak
+
+package-lock.json
+
+#images
+uploads/avatars/*

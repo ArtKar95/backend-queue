@@ -1,0 +1,57 @@
+{
+    "title": "create a new user",
+    "type": "object",
+    "properties": {
+        "body": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "lastName": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "minLength": 1,
+                    "maxLength": 254
+                },
+                "password": {
+                    "type": "string",
+                    "pattern": "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s]).{6,}$",
+                    "minLength": 6,
+                    "errorMessage": "must contain uppercase and lowercase letters, numbers and special characters"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": [
+                        "institution-admin",
+                        "institution-employee",
+                        "institution-manager",
+                        "super-admin"
+                    ],
+                    "errorMessage": "must be equal to one of the allowed values ['super-admin', 'institution-admin', 'institution-manager', 'institution-employee']"
+                },
+                "confirmPassword": {
+                    "const": {
+                        "$data": "1/password"
+                    },
+                    "errorMessage": "and password do not match",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "firstName",
+                "lastName",
+                "email",
+                "password",
+                "role",
+                "confirmPassword"
+            ]
+        }
+    },
+    "required": ["body"]
+}

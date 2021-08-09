@@ -1,0 +1,47 @@
+{
+    "title": "add an institution",
+    "type": "object",
+    "properties": {
+        "body": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "minLength": 1,
+                    "maxLength": 254,
+                    "errorMessage": "Email must match format 'email'"
+                },
+                "address": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "phone": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "type": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                }
+            },
+            "required": ["name", "email", "address", "phone", "type"]
+        }
+    },
+    "required": ["body"]
+}

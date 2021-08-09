@@ -1,0 +1,43 @@
+{
+    "title": "add a group",
+    "type": "object",
+    "properties": {
+        "body": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "minLength": 1,
+                    "maxLength": 254,
+                    "errorMessage": "Email must match format 'email'"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "institutions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[a-f\\d]{24}$",
+                        "errorMessage": "must match format ObjectId"
+                    }
+                },
+                "creator": {
+                    "type": "string",
+                    "pattern": "^[a-f\\d]{24}$",
+                    "errorMessage": "must match format ObjectId"
+                }
+            },
+            "required": ["name", "description"]
+        }
+    },
+    "required": ["body"]
+}

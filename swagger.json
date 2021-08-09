@@ -1,0 +1,1149 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Queue management",
+        "description": "Queue management",
+        "license": {
+            "name": "",
+            "url": ""
+        }
+    },
+    "host": "localhost:3007",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Users API"
+        },
+        {
+            "name": "Institution",
+            "description": "Institution API"
+        },
+        {
+            "name": "InstitutionType",
+            "description": "InstitutionType API"
+        },
+        {
+            "name": "Specialty",
+            "description": "Specialty API"
+        },
+        {
+            "name": "Group",
+            "description": "Group API"
+        }
+    ],
+
+    "schemes": ["http", "https"],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Users"],
+                "summary": "Get user information",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Get user information success",
+                        "schema": {
+                            "$ref": "#/definitions/institution"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/sign-up": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "User sign up",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/userSignUp"
+                        }
+                    }
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "201": {
+                        "description": "User sign up success",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Duplication detected",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/sign-in": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "User sign in",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/userSignIn"
+                        }
+                    }
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User signed in successfully",
+                        "schema": {
+                            "properties": {
+                                "jwt": {
+                                    "type": "string"
+                                },
+                                "refreshToken": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Duplication detected",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}/token": {
+            "put": {
+                "tags": ["Users"],
+                "summary": "Update Token",
+                "parameters": [
+                    {
+                        "name": "refresh token",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "refreshToken": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "User id",
+                        "type": "string"
+                    }
+                ],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Refresh token updated",
+                        "schema": {
+                            "$ref": "#/definitions/refreshToken"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/institution": {
+            "get": {
+                "tags": ["Institution"],
+                "summary": "Get all institutions",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Institution list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/getInstitution"
+                            }
+                        }
+                    },
+
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Institution"],
+                "summary": "Create an institution",
+                "consumes": ["multipart/form-data"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "Name of the institution",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "Enter email",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "address",
+                        "in": "formData",
+                        "description": "Enter address",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "phone",
+                        "in": "formData",
+                        "description": "Enter phone number",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "type",
+                        "in": "formData",
+                        "description": "The institution type",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "Description",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "logo",
+                        "type": "file",
+                        "required": false,
+                        "description": "Upload logo"
+                    },
+                    {
+                        "name": "group",
+                        "in": "formData",
+                        "description": "Group name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Institution created",
+                        "schema": {
+                            "$ref": "#/definitions/institution"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplication detected",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/institution/own": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Institution"],
+                "summary": "Get institutions owned by the admin",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Get institution list success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/institution"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/institution/{id}": {
+            "get": {
+                "tags": ["Institution"],
+                "summary": "Get single institution",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Institution id",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": " Single institution",
+                        "schema": {
+                            "$ref": "#/definitions/institution"
+                        }
+                    },
+
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Institution"],
+                "summary": "Update a institution",
+                "consumes": ["multipart/form-data"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Institution id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "Edit name of the institution",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "Edit email",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "address",
+                        "in": "formData",
+                        "description": "Edit address",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "phone",
+                        "in": "formData",
+                        "description": "Edit phone number",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "in": "formData",
+                        "description": "Edit institution type",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "Edit description",
+                        "type": "string"
+                    },
+                    {
+                        "name": "logo",
+                        "in": "formData",
+                        "type": "file",
+                        "description": "Upload logo"
+                    },
+                    {
+                        "name": "group",
+                        "in": "formData",
+                        "description": "Edited group id",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Institution updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/institution"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplication detected",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Institution id",
+                        "type": "string"
+                    }
+                ],
+
+                "tags": ["Institution"],
+                "summary": "Delete sigle institution",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Delete institution success",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/deleteInstitution"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/institution-types": {
+            "get": {
+                "tags": ["InstitutionType"],
+                "summary": "Get all InstitutionTypes",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "InstitutionType list",
+                        "schema": {
+                            "$ref": "#/definitions/institution-types"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/specialty": {
+            "get": {
+                "tags": ["Specialty"],
+                "summary": "Get all specialties",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Specialty list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/specialty"
+                            }
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+
+        "/group": {
+            "get": {
+                "tags": ["Group"],
+                "summary": "Get all groups",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Get All groups success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/group"
+                            }
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "tags": ["Group"],
+                "summary": "Create a group",
+                "consumes": ["multipart/form-data"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "Name of the group",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "Description",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "logo",
+                        "type": "file",
+                        "required": false,
+                        "description": "Upload logo"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Group created",
+                        "schema": {
+                            "$ref": "#/definitions/group"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplication detected",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/own": {
+            "get": {
+                "tags": ["Group"],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "summary": "Get admins groups",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Get group list success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "$ref": "#/definitions/group"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/group/{id}": {
+            "get": {
+                "tags": ["Group"],
+                "summary": "Get sigle group",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Group id",
+                        "type": "string"
+                    }
+                ],
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Get single group",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/group"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        },
+                        "5XX": {
+                            "description": "Unexpected error",
+                            "schema": {
+                                "$ref": "#/definitions/errorResponse"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Group id",
+                        "type": "string"
+                    }
+                ],
+
+                "tags": ["Group"],
+                "summary": "Delete sigle group",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Delete group success",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/deleteResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": ["multipart/form-data"],
+                "produces": ["application/json"],
+                "tags": ["Group"],
+                "summary": "Edit group",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Group id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "formData",
+                        "description": "Name of the group",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "formData",
+                        "description": "Description",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "logo",
+                        "in": "formData",
+                        "type": "file",
+                        "required": false,
+                        "description": "Upload logo"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Group is edited",
+                        "schema": {
+                            "$ref": "#/definitions/group"
+                        }
+                    },
+                    "409": {
+                        "description": "Duplication detected",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Not Authorized",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    },
+                    "5XX": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    "definitions": {
+        "userSignIn": {
+            "required": ["email", "password"],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "userSignUp": {
+            "required": [
+                "firstName",
+                "lastName",
+                "email",
+                "password",
+                "confirmPassword",
+                "role"
+            ],
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "confirmPassword": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "refreshToken": {
+            "required": ["refreshToken"],
+            "properties": {
+                "refreshToken": {
+                    "type": "string"
+                },
+                "jwt": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "institution": {
+            "required": ["name", "email", "address", "phone", "type"],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "getInstitution": {
+            "required": ["id", "name", "email", "address", "phone"],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "institutions": {
+            "required": ["institutions"],
+            "properties": {
+                "institutions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "$ref": "#/definitions/getInstitution"
+                    }
+                }
+            }
+        },
+        "deleteInstitution": {
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+
+        "institution-types": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "_id": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+
+        "specialty": {
+            "required": ["_id", "name"],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+
+        "group": {
+            "required": ["_id", "name", "description", "logo", "creator"],
+            "properties": {
+                "institutions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "$ref": "#/definitions/institution"
+                    }
+                },
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "logo": {
+                    "type": "string"
+                },
+                "creator": {
+                    "type": "string"
+                }
+            }
+        },
+        "deleteResponse": {
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "errorResponse": {
+            "properties": {
+                "error": {
+                    "properties": {
+                        "message": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "private": {
+                            "type": "boolean"
+                        },
+                        "status": {
+                            "type": "number"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
