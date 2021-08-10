@@ -8,8 +8,7 @@ import {
     fileTypeValidator,
     getFileExtention,
 } from '../../utils/fileUtils';
-// import fs from 'fs';
-import mv from 'mv';
+import fs from 'fs';
 
 const uploader = (req: Request, res: Response, next: NextFunction): void => {
     const form = new IncomingForm({
@@ -28,9 +27,30 @@ const uploader = (req: Request, res: Response, next: NextFunction): void => {
             if (fileTypeValidationError) return next(fileTypeValidationError);
             const fileName =
                 uuidv4() + '' + uuidv4() + '.' + getFileExtention(file.type);
-            mv(file.path, path.join(uploadDir, fileName), (err) => {
-                if (err) return next(err);
+            // fs.rename(file.path, path.join(uploadDir, fileName), (err) => {
+            //     if (err) return next(err);
+            // });
+
+            // Read the file
+            fs.readFile(file.path, function (err, data) {
+                if (err) throw err;
+                console.log('File read!');
+
+                // Write the file
+                fs.writeFile(uploadDir, data, function (err) {
+                    if (err) throw err;
+                    res.write('File uploaded and moved!');
+                    res.end();
+                    console.log('File written!');
+                });
+
+                // Delete the file
+                fs.unlink(file.path, function (err) {
+                    if (err) throw err;
+                    console.log('File deleted!');
+                });
             });
+
             res.locals.avatar = {
                 name: fileName,
                 size: file.size,
